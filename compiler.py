@@ -148,3 +148,12 @@ assert codeGenerator({
 		'value': 'hello world'
 	}]
 }) == '"hello world"'
+
+def compiler(input):
+	tokens = tokenizer(input)
+	ast = parser(tokens)
+	newAst = transformer(ast)
+	out = codeGenerator(newAst)
+	return out
+
+assert compiler('"hello world"') == '"hello world"'
