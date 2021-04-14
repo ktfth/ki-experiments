@@ -132,3 +132,19 @@ assert transformer({
 		'value': 'hello world'
 	}]
 }
+
+def codeGenerator(node):
+	if node['type'] == 'Program':
+		return '\n'.join(map(codeGenerator, node['body']))
+	elif node['type'] == 'StringLiteral':
+		return '"%s"' % (node['value'])
+	else:
+		raise TypeError(node['type'])
+
+assert codeGenerator({
+	'type': 'Program',
+	'body': [{
+		'type': 'StringLiteral',
+		'value': 'hello world'
+	}]
+}) == '"hello world"'
