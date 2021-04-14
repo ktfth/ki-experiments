@@ -64,3 +64,71 @@ assert parser([{'type': 'string', 'value': 'hello world'}]) == {
 		'value': 'hello world',
 	}]
 }
+
+def traverse(ast, visitor):
+	def traverseArray(array, parent):
+		if array:
+			for child in array:
+				traverseNode(child, parent)
+
+	def traverseNode(node, parent):
+		if node['type'] in visitor.keys():
+			methods = visitor[node['type']]
+
+		if not node['type'] in visitor.keys():
+			methods = None
+
+		if methods and methods['enter']:
+			methods['enter'](node, parent)
+
+		if node['type'] == 'Program':
+			traverseArray(node['body'], node)
+		elif node['type'] == 'StringLiteral':
+			pass
+		else:
+			raise TypeError(node['type'])
+
+		if methods and methods['exit']:
+			methods['exit'](node, parent)
+
+	traverseNode(ast, None)
+
+def transformer(ast):
+	newAst = {
+		'type': 'Program',
+		'body': []
+	}
+
+	ast['_context'] = newAst['body']
+
+	def enterStringLiteral(node, parent):
+		parent['_context'].append({
+			'type': 'StringLiteral',
+			'value': node['value']
+		})
+
+	def exitStringLiteral(node, parent):
+		pass
+
+	traverse(ast, {
+		'StringLiteral': {
+			'enter': enterStringLiteral,
+			'exit': exitStringLiteral
+		}
+	})
+
+	return newAst
+
+assert transformer({
+	'type': 'Program',
+	'body': [{
+		'type': 'StringLiteral',
+		'value': 'hello world'
+	}]
+}) == {
+	'type': 'Program',
+	'body': [{
+		'type': 'StringLiteral',
+		'value': 'hello world'
+	}]
+}
