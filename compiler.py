@@ -30,8 +30,6 @@ def tokenizer(input):
 
 	return tokens
 
-assert tokenizer('"hello world"') == [{'type': 'string', 'value': 'hello world'}]
-
 def parser(tokens):
 	current = 0
 
@@ -56,14 +54,6 @@ def parser(tokens):
 		current += 1
 
 	return ast
-
-assert parser([{'type': 'string', 'value': 'hello world'}]) == {
-	'type': 'Program',
-	'body': [{
-		'type': 'StringLiteral',
-		'value': 'hello world',
-	}]
-}
 
 def traverse(ast, visitor):
 	def traverseArray(array, parent):
@@ -119,41 +109,17 @@ def transformer(ast):
 
 	return newAst
 
-assert transformer({
-	'type': 'Program',
-	'body': [{
-		'type': 'StringLiteral',
-		'value': 'hello world'
-	}]
-}) == {
-	'type': 'Program',
-	'body': [{
-		'type': 'StringLiteral',
-		'value': 'hello world'
-	}]
-}
-
-def codeGenerator(node):
+def code_generator(node):
 	if node['type'] == 'Program':
-		return '\n'.join(map(codeGenerator, node['body']))
+		return '\n'.join(map(code_generator, node['body']))
 	elif node['type'] == 'StringLiteral':
 		return '"%s"' % (node['value'])
 	else:
 		raise TypeError(node['type'])
 
-assert codeGenerator({
-	'type': 'Program',
-	'body': [{
-		'type': 'StringLiteral',
-		'value': 'hello world'
-	}]
-}) == '"hello world"'
-
 def compiler(input):
 	tokens = tokenizer(input)
 	ast = parser(tokens)
 	newAst = transformer(ast)
-	out = codeGenerator(newAst)
+	out = code_generator(newAst)
 	return out
-
-assert compiler('"hello world"') == '"hello world"'
