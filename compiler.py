@@ -5,24 +5,22 @@ def tokenizer(input):
 
 	while current < len(input):
 		char = input[current]
-		stringEnding = False
 
 		if char == '"':
 			value = ''
 
-			try:
-				current += 1
-				char = input[current]
-			except Exception:
-				stringEnding = True
+			if current == (len(input) - 1):
+				break
+
+			current += 1
+			char = input[current]
 
 			while char != '"':
 				value += char
 				current += 1
 				char = input[current]
 
-			if not stringEnding:
-				tokens.append({'type': 'string', 'value': value})
+			tokens.append({'type': 'string', 'value': value})
 
 			continue
 
