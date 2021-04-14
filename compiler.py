@@ -31,3 +31,36 @@ def tokenizer(input):
 	return tokens
 
 assert tokenizer('"hello world"') == [{'type': 'string', 'value': 'hello world'}]
+
+def parser(tokens):
+	current = 0
+
+	def walk():
+		token = tokens[current]
+
+		if token['type'] == 'string':
+			return {
+				'type': 'StringLiteral',
+				'value': token['value']
+			}
+
+		raise TypeError(token['type'])
+
+	ast = {
+		'type': 'Program',
+		'body': []
+	}
+
+	while current < len(tokens):
+		ast['body'].append(walk())
+		current += 1
+
+	return ast
+
+assert parser([{'type': 'string', 'value': 'hello world'}]) == {
+	'type': 'Program',
+	'body': [{
+		'type': 'StringLiteral',
+		'value': 'hello world',
+	}]
+}
