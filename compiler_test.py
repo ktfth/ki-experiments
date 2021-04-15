@@ -89,5 +89,16 @@ class TestSingleQuoteStringLiteralCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
+class TestIntLiteralCompilation(unittest.TestCase):
+
+	def setUp(self):
+		self.input = '10'
+		self.output = '10'
+
+		self.tokens = [{'type': 'int', 'value': '10'}]
+
+	def test_tokenization(self):
+		self.assertEqual(tokenizer(self.input), self.tokens)
+
 if __name__ == '__main__':
 	unittest.main()
