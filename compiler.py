@@ -20,7 +20,25 @@ def tokenizer(input):
 				current += 1
 				char = input[current]
 
-			tokens.append({'type': 'string', 'value': value})
+			tokens.append({'type': 'quoted-string', 'value': value})
+
+			continue
+
+		if char == '\'':
+			value = ''
+
+			if current == (len(input) - 1):
+				break
+
+			current += 1
+			char = input[current]
+
+			while char != '\'':
+				value += char
+				current += 1
+				char = input[current]
+
+			tokens.append({'type': 'single-quote-string', 'value': value})
 
 			continue
 
@@ -34,9 +52,14 @@ def parser(tokens):
 	def walk():
 		token = tokens[current]
 
-		if token['type'] == 'string':
+		if token['type'] == 'quoted-string':
 			return {
-				'type': 'StringLiteral',
+				'type': 'QuotedStringLiteral',
+				'value': token['value']
+			}
+		elif token['type'] == 'single-quote-string':
+			return {
+				'type': 'SingleQuoteStringLiteral',
 				'value': token['value']
 			}
 
@@ -71,7 +94,9 @@ def traverse(ast, visitor):
 
 		if node['type'] == 'Program':
 			traverseArray(node['body'], node)
-		elif node['type'] == 'StringLiteral':
+		elif node['type'] == 'QuotedStringLiteral':
+			pass
+		elif node['type'] == 'SingleQuoteStringLiteral':
 			pass
 		else:
 			raise TypeError(node['type'])
@@ -89,19 +114,33 @@ def transformer(ast):
 
 	ast['_context'] = newAst['body']
 
-	def enterStringLiteral(node, parent):
+	def enterQuotedStringLiteral(node, parent):
 		parent['_context'].append({
-			'type': 'StringLiteral',
+			'type': 'QuotedStringLiteral',
 			'value': node['value']
 		})
 
-	def exitStringLiteral(node, parent):
+	def exitQuotedStringLiteral(node, parent):
+		pass
+
+	def enterSingleQuoteStringLiteral(node, parent):
+		parent['_context'].append({
+			'type': 'SingleQuoteStringLiteral',
+			'value': node['value']
+		})
+
+	def exitSingleQuoteStringLiteral(node, parent):
 		pass
 
 	traverse(ast, {
-		'StringLiteral': {
-			'enter': enterStringLiteral,
-			'exit': exitStringLiteral
+		'QuotedStringLiteral': {
+			'enter': enterQuotedStringLiteral,
+			'exit': exitQuotedStringLiteral
+		},
+
+		'SingleQuoteStringLiteral': {
+			'enter': enterSingleQuoteStringLiteral,
+			'exit': exitSingleQuoteStringLiteral
 		}
 	})
 
@@ -110,8 +149,10 @@ def transformer(ast):
 def code_generator(node):
 	if node['type'] == 'Program':
 		return '\n'.join(map(code_generator, node['body']))
-	elif node['type'] == 'StringLiteral':
+	elif node['type'] == 'QuotedStringLiteral':
 		return '"%s"' % (node['value'])
+	elif node['type'] == 'SingleQuoteStringLiteral':
+		return '\'%s\'' % (node['value'])
 	else:
 		raise TypeError(node['type'])
 
