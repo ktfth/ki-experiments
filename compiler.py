@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import re
+
 def tokenizer(input):
 	current = 0;
 	tokens = []
@@ -39,6 +41,26 @@ def tokenizer(input):
 				char = input[current]
 
 			tokens.append({'type': 'single-quote-string', 'value': value})
+
+			continue
+
+		NUMBER = r'[0-9]'
+		if re.search(NUMBER, char):
+			value = ''
+
+			if current == (len(input) - 1):
+				break
+
+			while re.search(NUMBER, char):
+				value += char
+
+				if current == (len(input) - 1):
+					break
+
+				current += 1
+				char = input[current]
+
+			tokens.append({'type': 'int', 'value': value})
 
 			continue
 
