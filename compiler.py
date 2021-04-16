@@ -196,6 +196,8 @@ def code_generator(node):
 		return '"%s"' % (node['value'])
 	elif node['type'] == 'SingleQuoteStringLiteral':
 		return '\'%s\'' % (node['value'])
+	elif node['type'] == 'IntLiteral':
+		return '%s' % (node['value'])
 	else:
 		raise TypeError(node['type'])
 
