@@ -28,7 +28,7 @@ def tokenizer(input):
 
 			continue
 
-		elif char == '\'':
+		if char == '\'':
 			value = ''
 
 			if current == (len(input) - 1):
@@ -46,7 +46,7 @@ def tokenizer(input):
 
 			continue
 
-		elif re.search(NUMBER, char):
+		if re.search(NUMBER, char):
 			value = ''
 			type = 'int'
 
