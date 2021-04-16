@@ -97,8 +97,19 @@ class TestIntLiteralCompilation(unittest.TestCase):
 
 		self.tokens = [{'type': 'int', 'value': '10'}]
 
+		self.ast = {
+			'type': 'Program',
+			'body': [{
+				'type': 'IntLiteral',
+				'value': '10'
+			}]
+		}
+
 	def test_tokenization(self):
 		self.assertEqual(tokenizer(self.input), self.tokens)
+
+	def test_parsing(self):
+		self.assertEqual(parser(self.tokens), self.ast)
 
 if __name__ == '__main__':
 	unittest.main()
