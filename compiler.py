@@ -84,6 +84,11 @@ def parser(tokens):
 				'type': 'SingleQuoteStringLiteral',
 				'value': token['value']
 			}
+		elif token['type'] == 'int':
+			return {
+				'type': 'IntLiteral',
+				'value': token['value']
+			}
 
 		raise TypeError(token['type'])
 
