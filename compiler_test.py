@@ -128,5 +128,16 @@ class TestIntLiteralCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
+class TestFloatLiteralCompilation(unittest.TestCase):
+
+	def setUp(self):
+		self.input = '1.5'
+		self.output = '1.5'
+
+		self.tokens = [{'type': 'float', 'value': '1.5'}]
+
+	def test_tokenization(self):
+		self.assertEqual(tokenizer(self.input), self.tokens)
+
 if __name__ == '__main__':
 	unittest.main()
