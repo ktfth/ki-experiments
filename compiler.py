@@ -8,6 +8,8 @@ def tokenizer(input):
 	while current < len(input):
 		char = input[current]
 
+		NUMBER = r'[0-9]|\.'
+
 		if char == '"':
 			value = ''
 
@@ -26,7 +28,7 @@ def tokenizer(input):
 
 			continue
 
-		if char == '\'':
+		elif char == '\'':
 			value = ''
 
 			if current == (len(input) - 1):
@@ -44,9 +46,9 @@ def tokenizer(input):
 
 			continue
 
-		NUMBER = r'[0-9]'
-		if re.search(NUMBER, char):
+		elif re.search(NUMBER, char):
 			value = ''
+			type = 'int'
 
 			if current == (len(input) - 1):
 				break
@@ -60,7 +62,10 @@ def tokenizer(input):
 				current += 1
 				char = input[current]
 
-			tokens.append({'type': 'int', 'value': value})
+			if value.find('.') > -1:
+				type = 'float'
+
+			tokens.append({'type': type, 'value': value})
 
 			continue
 
