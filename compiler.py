@@ -125,6 +125,8 @@ def traverse(ast, visitor):
 			pass
 		elif node['type'] == 'SingleQuoteStringLiteral':
 			pass
+		elif node['type'] == 'IntLiteral':
+			pass
 		else:
 			raise TypeError(node['type'])
 
@@ -159,6 +161,15 @@ def transformer(ast):
 	def exitSingleQuoteStringLiteral(node, parent):
 		pass
 
+	def enterIntLiteral(node, parent):
+		parent['_context'].append({
+			'type': 'IntLiteral',
+			'value': node['value']
+		})
+
+	def exitIntLiteral(node, parent):
+		pass
+
 	traverse(ast, {
 		'QuotedStringLiteral': {
 			'enter': enterQuotedStringLiteral,
@@ -168,6 +179,11 @@ def transformer(ast):
 		'SingleQuoteStringLiteral': {
 			'enter': enterSingleQuoteStringLiteral,
 			'exit': exitSingleQuoteStringLiteral
+		},
+
+		'IntLiteral': {
+			'enter': enterIntLiteral,
+			'exit': exitIntLiteral
 		}
 	})
 
