@@ -94,6 +94,11 @@ def parser(tokens):
 				'type': 'IntLiteral',
 				'value': token['value']
 			}
+		elif token['type'] == 'float':
+			return {
+				'type': 'FloatLiteral',
+				'value': token['value']
+			}
 
 		raise TypeError(token['type'])
 
