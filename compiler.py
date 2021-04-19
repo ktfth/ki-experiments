@@ -137,6 +137,8 @@ def traverse(ast, visitor):
 			pass
 		elif node['type'] == 'IntLiteral':
 			pass
+		elif node['type'] == 'FloatLiteral':
+			pass
 		else:
 			raise TypeError(node['type'])
 
@@ -180,6 +182,15 @@ def transformer(ast):
 	def exitIntLiteral(node, parent):
 		pass
 
+	def enterFloatLiteral(node, parent):
+		parent['_context'].append({
+			'type': 'FloatLiteral',
+			'value': node['value']
+		})
+
+	def exitFloatLiteral(node, parent):
+		pass
+
 	traverse(ast, {
 		'QuotedStringLiteral': {
 			'enter': enterQuotedStringLiteral,
@@ -194,6 +205,11 @@ def transformer(ast):
 		'IntLiteral': {
 			'enter': enterIntLiteral,
 			'exit': exitIntLiteral
+		},
+
+		'FloatLiteral': {
+			'enter': enterFloatLiteral,
+			'exit': exitFloatLiteral
 		}
 	})
 
