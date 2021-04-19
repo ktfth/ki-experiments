@@ -136,8 +136,19 @@ class TestFloatLiteralCompilation(unittest.TestCase):
 
 		self.tokens = [{'type': 'float', 'value': '1.5'}]
 
+		self.ast = {
+			'type': 'Program',
+			'body': [{
+				'type': 'FloatLiteral',
+				'value': '1.5'
+			}]
+		}
+
 	def test_tokenization(self):
 		self.assertEqual(tokenizer(self.input), self.tokens)
+
+	def test_parsing(self):
+		self.assertEqual(parser(self.tokens), self.ast)
 
 if __name__ == '__main__':
 	unittest.main()
