@@ -167,5 +167,16 @@ class TestFloatLiteralCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
+class TestTrueBooleanLiteralCompilation(unittest.TestCase):
+
+	def setUp(self):
+		self.input = 'true'
+		self.output = 'true'
+
+		self.tokens = [{'type': 'boolean', 'value': 'true'}]
+
+	def test_tokenization(self):
+		self.assertEqual(tokenizer(self.input), self.tokens)
+
 if __name__ == '__main__':
 	unittest.main()
