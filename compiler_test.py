@@ -161,5 +161,8 @@ class TestFloatLiteralCompilation(unittest.TestCase):
 	def test_transformation(self):
 		self.assertEqual(transformer(self.ast), self.newAst)
 
+	def test_code_generation(self):
+		self.assertEqual(code_generator(self.newAst), self.output)
+
 if __name__ == '__main__':
 	unittest.main()
