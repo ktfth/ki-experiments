@@ -120,6 +120,11 @@ def parser(tokens):
 				'type': 'FloatLiteral',
 				'value': token['value']
 			}
+		elif token['type'] == 'boolean':
+			return {
+				'type': 'BooleanLiteral',
+				'value': token['value']
+			}
 
 		raise TypeError(token['type'])
 
