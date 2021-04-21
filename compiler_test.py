@@ -245,5 +245,20 @@ class TestFalseBooleanLiteralCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
+class TestSumOperationStmtCompilation(unittest.TestCase):
+
+	def setUp(self):
+		self.input = '1 + 1'
+		self.output = '1 + 1'
+
+		self.tokens = [
+			{'type': 'int', 'value': '1'},
+			{'type': 'operation', 'value': '+'},
+			{'type': 'int', 'value': '1'}
+		]
+
+	def test_tokenization(self):
+		self.assertEqual(tokenizer(self.input), self.tokens)
+
 if __name__ == '__main__':
 	unittest.main()
