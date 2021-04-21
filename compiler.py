@@ -85,7 +85,7 @@ def tokenizer(input):
 				current += 1
 				char = input[current]
 
-			if value == 'true':
+			if value == 'true' or value == 'false':
 				tokens.append({'type': 'boolean', 'value': value})
 
 			continue

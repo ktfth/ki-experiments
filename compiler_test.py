@@ -206,5 +206,44 @@ class TestTrueBooleanLiteralCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
+class TestFalseBooleanLiteralCompilation(unittest.TestCase):
+
+	def setUp(self):
+		self.input = 'false'
+		self.output = 'false'
+
+		self.tokens = [{'type': 'boolean', 'value': 'false'}]
+
+		self.ast = {
+			'type': 'Program',
+			'body': [{
+				'type': 'BooleanLiteral',
+				'value': 'false'
+			}]
+		}
+
+		self.newAst = {
+			'type': 'Program',
+			'body': [{
+				'type': 'BooleanLiteral',
+				'value': 'false'
+			}]
+		}
+
+	def test_tokenization(self):
+		self.assertEqual(tokenizer(self.input), self.tokens)
+
+	def test_parsing(self):
+		self.assertEqual(parser(self.tokens), self.ast)
+
+	def test_transformation(self):
+		self.assertEqual(transformer(self.ast), self.newAst)
+
+	def test_code_generation(self):
+		self.assertEqual(code_generator(self.newAst), self.output)
+
+	def test_compilation(self):
+		self.assertEqual(compiler(self.input), self.output)
+
 if __name__ == '__main__':
 	unittest.main()
