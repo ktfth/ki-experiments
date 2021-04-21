@@ -9,7 +9,7 @@ def tokenizer(input):
 		char = input[current]
 
 		NUMBER = r'[0-9]|\.'
-		LETTER = r'[a-z]'
+		LETTER = r'[a-z]|[A-Z]'
 
 		if char == '"':
 			value = ''
@@ -51,9 +51,6 @@ def tokenizer(input):
 			value = ''
 			type = 'int'
 
-			if current == (len(input) - 1):
-				break
-
 			while re.search(NUMBER, char):
 				value += char
 
@@ -67,6 +64,9 @@ def tokenizer(input):
 				type = 'float'
 
 			tokens.append({'type': type, 'value': value})
+
+			if current == (len(input) - 1):
+				break
 
 			continue
 
@@ -87,6 +87,24 @@ def tokenizer(input):
 
 			if value == 'true' or value == 'false':
 				tokens.append({'type': 'boolean', 'value': value})
+
+			continue
+
+		if char == ' ' or char == '\n':
+			if current == (len(input) - 1):
+				break
+
+			current += 1
+
+			continue
+
+		if char == '+':
+			if current == (len(input) - 1):
+				break
+
+			current += 1
+
+			tokens.append({ 'type': 'operation', 'value': char })
 
 			continue
 
