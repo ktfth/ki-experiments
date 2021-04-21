@@ -336,6 +336,8 @@ def code_generator(node):
 		return '%s' % (node['value'])
 	elif node['type'] == 'BooleanLiteral':
 		return '%s' % (node['value'])
+	elif node['type'] == 'OperationStatement':
+		return '%s %s %s' % (node['expression']['left']['value'], node['expression']['value'], node['expression']['right']['value'])
 	else:
 		raise TypeError(node['type'])
 
