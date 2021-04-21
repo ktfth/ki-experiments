@@ -184,7 +184,7 @@ def parser(tokens):
 		ast['body'].append(walk())
 		has_operation = len([x for x in filter(lambda n: n['type'] == 'OperationExpression', ast['body'])]) > 0
 		if has_operation:
-			ast['body'] = [x for x in filter(lambda n: n['type'] in base_ast_types, ast['body'])]
+			ast['body'] = [x for x in filter(lambda n: not n['type'] in base_ast_types, ast['body'])]
 		current += 1
 
 	return ast
