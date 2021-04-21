@@ -262,14 +262,13 @@ class TestSumOperationStmtCompilation(unittest.TestCase):
 			'body': [{
 				'type': 'OperationExpression',
 				'value': '+',
-				'left': {
+				'params': [{
 					'type': 'IntLiteral',
 					'value': '1'
-				},
-				'right': {
+				}, {
 					'type': 'IntLiteral',
 					'value': '1'
-				}
+				}]
 			}]
 		}
 
@@ -280,14 +279,13 @@ class TestSumOperationStmtCompilation(unittest.TestCase):
 				'expression': {
 					'type': 'OperationExpression',
 					'value': '+',
-					'left': {
+					'params': [{
 						'type': 'IntLiteral',
 						'value': '1'
-					},
-					'right': {
+					}, {
 						'type': 'IntLiteral',
 						'value': '1'
-					}
+					}]
 				}
 			}]
 		}
@@ -307,22 +305,43 @@ class TestSumOperationStmtCompilation(unittest.TestCase):
 	def test_compilation(self):
 		self.assertEqual(compiler(self.input), self.output)
 
-class TestAccSumOperationStmtCompilation(unittest.TestCase):
-
-	def setUp(self):
-		self.input = '1 + 1 + 1'
-		self.output = '1 + 1 + 1'
-
-		self.tokens = [
-			{'type': 'int', 'value': '1'},
-			{'type': 'operation', 'value': '+'},
-			{'type': 'int', 'value': '1'},
-			{'type': 'operation', 'value': '+'},
-			{'type': 'int', 'value': '1'},
-		]
-
-	def test_tokenization(self):
-		self.assertEqual(tokenizer(self.input), self.tokens)
+# class TestAccSumOperationStmtCompilation(unittest.TestCase):
+#
+# 	def setUp(self):
+# 		self.input = '1 + 1 + 1'
+# 		self.output = '1 + 1 + 1'
+#
+# 		self.tokens = [
+# 			{'type': 'int', 'value': '1'},
+# 			{'type': 'operation', 'value': '+'},
+# 			{'type': 'int', 'value': '1'},
+# 			{'type': 'operation', 'value': '+'},
+# 			{'type': 'int', 'value': '1'},
+# 		]
+#
+# 		self.ast = {
+# 			'type': 'Program',
+# 			'body': [{
+# 				'type': 'OperationExpression',
+# 				'value': '+',
+# 				'params': [{
+# 					'type': 'IntLiteral',
+# 					'value': '1'
+# 				}, {
+# 					'type': 'IntLiteral',
+# 					'value': '1'
+# 				}, {
+# 					'type': 'IntLiteral',
+# 					'value': '1'
+# 				}]
+# 			}]
+# 		}
+#
+# 	def test_tokenization(self):
+# 		self.assertEqual(tokenizer(self.input), self.tokens)
+#
+# 	def test_parsing(self):
+# 		self.assertEqual(parser(self.tokens), self.ast)
 
 if __name__ == '__main__':
 	unittest.main()
