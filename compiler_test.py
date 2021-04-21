@@ -273,11 +273,33 @@ class TestSumOperationStmtCompilation(unittest.TestCase):
 			}]
 		}
 
+		self.newAst = {
+			'type': 'Program',
+			'body': [{
+				'type': 'OperationStatement',
+				'expression': {
+					'type': 'OperationExpression',
+					'value': '+',
+					'left': {
+						'type': 'IntLiteral',
+						'value': '1'
+					},
+					'right': {
+						'type': 'IntLiteral',
+						'value': '1'
+					}
+				}
+			}]
+		}
+
 	def test_tokenization(self):
 		self.assertEqual(tokenizer(self.input), self.tokens)
 
 	def test_parsing(self):
 		self.assertEqual(parser(self.tokens), self.ast)
+
+	def test_transformation(self):
+		self.assertEqual(transformer(self.ast), self.newAst)
 
 if __name__ == '__main__':
 	unittest.main()
