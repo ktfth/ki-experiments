@@ -268,6 +268,8 @@ def code_generator(node):
 		return '%s' % (node['value'])
 	elif node['type'] == 'FloatLiteral':
 		return '%s' % (node['value'])
+	elif node['type'] == 'BooleanLiteral':
+		return '%s' % (node['value'])
 	else:
 		raise TypeError(node['type'])
 
