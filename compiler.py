@@ -115,9 +115,7 @@ def tokenizer(input):
 def parser(tokens):
 	current = 0
 
-	def walk():
-		token = tokens[current]
-
+	def base_ast(token):
 		if token['type'] == 'quoted-string':
 			return {
 				'type': 'QuotedStringLiteral',
@@ -146,6 +144,32 @@ def parser(tokens):
 
 		raise TypeError(token['type'])
 
+	def walk():
+		token = tokens[current]
+
+		if token['type'] == 'quoted-string':
+			return base_ast(token)
+		elif token['type'] == 'single-quote-string':
+			return base_ast(token)
+		elif token['type'] == 'int':
+			return base_ast(token)
+		elif token['type'] == 'float':
+			return base_ast(token)
+		elif token['type'] == 'boolean':
+			return base_ast(token)
+		elif token['type'] == 'operation' and token['value'] == '+':
+			node = {
+				'type': 'OperationExpression',
+				'value': token['value'],
+			}
+
+			node['left'] = base_ast(tokens[current - 1])
+			node['right'] = base_ast(tokens[current + 1])
+
+			return node
+
+		raise TypeError(token['type'])
+
 	ast = {
 		'type': 'Program',
 		'body': []
@@ -153,6 +177,9 @@ def parser(tokens):
 
 	while current < len(tokens):
 		ast['body'].append(walk())
+		has_operation = len([x for x in filter(lambda n: n['type'] == 'OperationExpression', ast['body'])]) > 0
+		if has_operation:
+			ast['body'] = [x for x in filter(lambda n: n['type'] != 'IntLiteral', ast['body'])]
 		current += 1
 
 	return ast
