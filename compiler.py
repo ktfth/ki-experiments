@@ -212,6 +212,8 @@ def traverse(ast, visitor):
 			pass
 		elif node['type'] == 'BooleanLiteral':
 			pass
+		elif node['type'] == 'OperationExpression':
+			pass
 		else:
 			raise TypeError(node['type'])
 
@@ -273,6 +275,20 @@ def transformer(ast):
 	def exitBooleanLiteral(node, parent):
 		pass
 
+	def enterOperationStatement(node, parent):
+		parent['_context'].append({
+			'type': 'OperationStatement',
+			'expression': {
+				'type': 'OperationExpression',
+				'value': node['value'],
+				'left': node['left'],
+				'right': node['right']
+			}
+		})
+
+	def exitOperationStatement(node, parent):
+		pass
+
 	traverse(ast, {
 		'QuotedStringLiteral': {
 			'enter': enterQuotedStringLiteral,
@@ -297,6 +313,11 @@ def transformer(ast):
 		'BooleanLiteral': {
 			'enter': enterBooleanLiteral,
 			'exit': exitBooleanLiteral
+		},
+
+		'OperationExpression': {
+			'enter': enterOperationStatement,
+			'exit': exitOperationStatement
 		}
 	})
 
